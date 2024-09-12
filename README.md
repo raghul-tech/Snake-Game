@@ -5,9 +5,9 @@
 </h1>
 <h1 align ="center">
   <br>
-  <a href="https://github.com/raghul-tech/Snake-Game.git"><img src="img/snakeGameOver.png"></a>
+  <a href="https://github.com/raghul-tech/Snake-Game.git"><img src="img/snakeGame.png"></a>
 </h1>
 <h1 align ="center">
   <br>
-  <a href="https://github.com/raghul-tech/Snake-Game.git"><img src="img/snakeGame.png"></a>
+  <a href="https://github.com/raghul-tech/Snake-Game.git"><img src="img/snakeGameOver.png"></a>
 </h1>
