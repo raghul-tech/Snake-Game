@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Snake Game</title>
+	<link rel="stylesheet" href="style.css" type="text/css">
+
+  
+</head>
+<body>
+	<div class="container">
+		<div id="overlay" >
+			Your Final Score: <span id="final_score"></span>
+			<br>
+			<a onclick="window.location.reload()" href="#">Click To Play Again</a>
+		</div>
+		<canvas id="canvas" width="600" height="450">
+			Sorry This Browser does not support Canvas
+		</canvas>
+		<div id="stats">
+			<div id="score"></div>
+				<div id="high_score"></div>
+				<button onclick="resetScore()" id="reset_score">Reset High Score</button>
+	</div>
+	<div class="dropdown">
+	 	 <button class="dropbtn">Select Snake Color</button>
+			    <div class="dropdown-content" id ="color-options">
+			    	<li data-color="green">Green</li>
+			    	<li data-color="red">Red</li>
+			    	<li data-color="blue">Blue</li>
+			    	<li data-color="yellow">Yellow</li>
+			    	<li data-color="purple">Purple</li>
+			    </div>
+			</div>
+	</div>
+
+	 <!-- JQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<!-- Main js -->
+	<script type="text/javascript" src="script.js"></script>
+
+	
+</body>
+</html>
