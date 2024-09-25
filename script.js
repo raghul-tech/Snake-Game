@@ -123,7 +123,6 @@ function adjust_speed() {
           var yPos = y * cw + cw / 2;
 		ctx.fillStyle=color;
 		ctx.beginPath();
-		//ctx.arc(x*cw,y*cw,6,0,Math.PI*2);
 		 ctx.arc(xPos, yPos, radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.strokeStyle="white";
