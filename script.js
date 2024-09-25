@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	//Define Vars
 	var canvas = $('#canvas')[0];
 	var ctx = canvas.getContext("2d");
 	var w = $('#canvas').width();
@@ -9,45 +8,65 @@ $(document).ready(function(){
 	var food;
 	var score;
 	var color = localStorage.getItem('snakeColor') || "green";
-	var speed = 130;
+	var initialSpeed = 135;
+	var speed = initialSpeed;
 	var game_loop;
-
-	//Snake Array
 	var snake_array;
+   
+function adjust_speed() {
+	 speed = Math.max(50, initialSpeed - snake_array.length);
+	      // Restart game loop with new speed
+	    if (typeof game_loop !== "undefined") {
+	        clearInterval(game_loop);
+	        game_loop = setInterval(paint, speed);
+	    }
+	    console.log("Current Speed: ",speed)
+	}
+
 
 	//Initializer
 	function init(){
 		 d="right";
 		create_snake();
 		create_food();
+	
 		score = 0;
-
+		speed = initialSpeed;
 		if(typeof game_loop != "undefined") clearInterval(game_loop);
 		game_loop = setInterval(paint,speed);
-	}
-	init(); //Run initializer
-
+		}
 	//Create Snake
 	function create_snake(){
-		var length  = 5;
+		var length  = 3;
 		snake_array = [];
-		for(var i = length-1;i>=0;i--){
+		for(var i = length;i>=0;i--){
 			snake_array.push({x:i,y:0});
 		}
 	}
 
 	//Create Food
+	var food = { x: 0, y: 0, type: "normal" };
 	function create_food() {
-		// body...
-		food = {
-			x:Math.round(Math.random()*(w-cw)/cw), 
-			y:Math.round(Math.random()*(h-cw)/cw),
-		};
+		let foodPosition = false;
+		 let randomType = Math.random() < 0.2 ? "bonus" : "normal";
+
+		while(!foodPosition){
+			let foodx=Math.floor(Math.random()*(w-cw)/cw);
+			let foody=Math.floor(Math.random()*(h-cw)/cw);
+   				if(!check_collision(foodx,foody,snake_array)){
+   					food={
+   						x:foodx,
+   						y:foody,
+   						type:randomType
+   					};
+   					foodPosition = true;
+	  }
 	}
+}
 
 	//Paint Snake
 	function paint(){
-		//Paint The Canvas 
+		//canvas paint
 		ctx.fillStyle = "black";
 		ctx.fillRect(0,0,w,h);
 		ctx.strokeStyle = "white";
@@ -71,12 +90,15 @@ $(document).ready(function(){
 			$('#overlay').fadeIn(300);
 			return;
 		}
-
 		if(nx == food.x && ny == food.y){
 			var tail = {x:nx,y:ny};
+			if(food.type == "bonus"){
+			  score+=5;
+			}else{
 			score++;
-			//Create Food
+		}
 			create_food();
+		    adjust_speed();
 		}else{
 			var tail = snake_array.pop();
 			tail.x = nx; 
@@ -89,37 +111,53 @@ $(document).ready(function(){
 			var c = snake_array[i];
 			paint_cell(c.x,c.y);
 		}
-		//paint cell
-		paint_cell(food.x,food.y);
-
-		//Check Score
+	
+		food_cell(food.x,food.y);
+     
 		checkscore(score);
-
-		//Display current score
 		$('#score').html('Your Score: '+score);
 	}
 	function paint_cell(x,y){
+          var radius = 6; 
+          var xPos = x * cw + cw / 2; 
+          var yPos = y * cw + cw / 2;
 		ctx.fillStyle=color;
-		ctx.fillRect(x*cw,y*cw,cw,cw);
-		ctx.strokeStyle="white";
-		ctx.strokeRect(x*cw,y*cw,cw,cw);
+		ctx.beginPath();
+		//ctx.arc(x*cw,y*cw,6,0,Math.PI*2);
+		 ctx.arc(xPos, yPos, radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle="white";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+	}
+	function food_cell(x,y){
+		 var radius = cw/2 ;
+		 var xPos = x * cw + cw / 2;
+         var yPos = y * cw + cw / 2;
+		ctx.fillStyle=food.type == "bonus" ? "blue" : "red";
+		ctx.beginPath();
+		ctx.arc(xPos,yPos,radius,0,Math.PI*2);
+        ctx.fill();
+        ctx.strokeStyle=food.type == "bonus" ? "blue" : "red";
+        ctx.lineWidth = 5;
+        ctx.stroke();
 	}
 
 	function check_collision(x,y,array) {
 		// body...
 		for(var i = 0; i<array.length;i++){
-			if(array[i].x == x && array[i].y == y)
+			if(array[i].x == x && array[i].y == y){
 				return true;
+			}
 		}
 		return false;
 	}
-
 	function checkscore(score){
 		if(localStorage.getItem('highscore') == null){
-			//if ther is no high score
+			//no high score code
 			localStorage.setItem('highscore',score);
 		}else{
-			//if there is a high score
+			//high score code
 			if(score > localStorage.getItem('highscore')){
 				localStorage.setItem('highscore',score)
 			}
@@ -128,31 +166,121 @@ $(document).ready(function(){
 	}
 
 	//Keyboard controller
+	var Direction = false;
 	$(document).keydown(function(e){
 		var key = e.which;
+		if(Direction) return;
 		if(key == "37" && d != "right") d ="left";
 		else if(key == "38" && d != "down") d ="up";
 		else if(key == "39" && d!= "left") d = "right";
 		else if(key == "40" && d!="up") d = "down";
+		Direction = true;
+		 setTimeout(function() {
+        Direction = false;
+    }, 100);
 	});
 
-	//color change
+	//color change code
+	 $('.dropbtn').click(function() {
+        $('.dropdown-content').toggle(); 
+    });
 	$('.dropdown-content li').click(function(){
 		color = $(this).data('color');
 		localStorage.setItem('snakeColor',color);
+		$('.dropdown-content').toggle(); 
 	});
-
+	 $(document).click(function(event) {
+        if (!$(event.target).closest('.dropdown').length) {
+            $('.dropdown-content').hide();
+        }
+    });
 		var savedColor = localStorage.getItem('snakeColor');
 		if(savedColor){
 			color = savedColor;
 		}
 
-		/*window.startGame= function(){
-			$('overlay').hide();
+         //start btn code 
+        $('.Start-Btn').click(function(){
+        	init();
+        	$('#overlay').hide();
+        	$('#start-overlay').hide();
+        	return;
+        });
+         $('#overlay').click(function(){
+        	init();
+        	$('#overlay').hide();
+        	$('#start-overlay').hide();
+        	return;
+        });
+		$('#start-overlay').click(function(){
+			$('#overlay').hide();
+			$('#start-overlay').hide();
 			init();
-		};*/
-});
+			return;
+		});
+        
+// this code is for mobile touch screen 
+var touchStartX = 0;
+var touchStartY = 0;
 
+$('#canvas').on('touchstart', function(e) {
+    var touch = e.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+},{ passive: true });
+
+$('#canvas').on('touchmove', function(e) {
+    var touch = e.touches[0];
+    var touchEndX = touch.clientX;
+    var touchEndY = touch.clientY;
+    
+    var diffX = touchEndX - touchStartX;
+    var diffY = touchEndY - touchStartY;
+
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+        if (diffX > 0 && d != "left") d = "right";
+        else if (diffX < 0 && d != "right") d = "left";
+    } else {
+        if (diffY > 0 && d != "up") d = "down";
+        else if (diffY < 0 && d != "down") d = "up";
+    }
+
+},{ passive: true });
+
+    //Modes for select mode
+   $('#diff-btn').click(function() {
+        $('#diff-option').toggle(); 
+    });
+
+    $('#easy').click(function() {
+        initialSpeed = 160; 
+        speed = initialSpeed;
+        console.log("Easy mode selected, Speed:", speed);
+        $('#diff-option').hide(); 
+    });
+
+    $('#medium').click(function() {
+        initialSpeed = 135; 
+        speed = initialSpeed;
+        console.log("Medium mode selected, Speed:", speed);
+        $('#diff-option').hide();
+    });
+
+    $('#hard').click(function() {
+        initialSpeed = 100; 
+        speed = initialSpeed;
+        console.log("Hard mode selected, Speed:", speed);
+        $('#diff-option').hide();
+    });
+
+    $(document).click(function(event) {
+        if (!$(event.target).closest('#difficulty').length) {
+            $('#diff-option').hide();
+        }
+    });
+
+}); 
+//reset high score code 
 function resetScore(){
 	localStorage.highscore = 0;
 	//Display high score
