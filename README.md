@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 # Snake Game
 
@@ -33,13 +32,13 @@ Snake Game is a simple yet fun classic arcade game developed using HTML, CSS, an
 
 <p align="center">
   <a href="https://github.com/raghul-tech/Snake-Game.git">
-    <img src="img/snakegame.png" alt="Game Over Screen">
+    <img src="img/snakeGame.png" alt="Game Over Screen">
   </a>
 </p>
 
 <p align="center">
   <a href="https://github.com/raghul-tech/Snake-Game.git">
-    <img src="img/SnakeGameOver.png" alt="Game Over Screen">
+    <img src="img/snakeGameOver.png" alt="Game Over Screen">
   </a>
 </p>
 
@@ -82,18 +81,3 @@ This project is licensed under the  GNU General Public License (GPL v3).
 
 ## Contact
 Developed by [Raghul John R](https://www.linkedin.com/in/raghul-john-r-3a9577320).
-=======
-<p>This is a Snake Game which i created using html css javascript </p>
-<h1 align ="center">
-  <br>
-  <a href="https://github.com/raghul-tech/Snake-Game.git"><img src="img/SnakeGameOver1.png"></a>
-</h1>
-<h1 align ="center">
-  <br>
-  <a href="https://github.com/raghul-tech/Snake-Game.git"><img src="img/snakeGame.png"></a>
-</h1>
-<h1 align ="center">
-  <br>
-  <a href="https://github.com/raghul-tech/Snake-Game.git"><img src="img/snakeGameOver.png"></a>
-</h1>
->>>>>>> b0e1a502091bef8d5dcc2036f38237fca88728b4
