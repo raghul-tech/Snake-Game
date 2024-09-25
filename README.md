@@ -38,7 +38,6 @@ Snake Game is a simple yet fun classic arcade game developed using HTML, CSS, an
 
 <p align="center">
   <a href="https://github.com/raghul-tech/Snake-Game.git">
-<<<<<<< HEAD
     <img src="img/snakeGameOver.png" alt="Over Screen">
   </a>
 </p>
