@@ -146,11 +146,12 @@ self.addEventListener('install', event => {
 // Fetch event
 self.addEventListener('fetch', event => {
   event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        return response || fetch(event.request);
-      })
+    caches.match(event.request).then(response => {
+      return response || fetch(event.request).catch(() => {
+        // Return index.html for offline fallback
+        return caches.match('/index.html');
+      });
+    })
   );
 });
 
