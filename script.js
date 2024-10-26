@@ -1,3 +1,20 @@
+// Check if service workers are supported in the browser
+if ('serviceWorker' in navigator) {
+  // Wait for the window to load before registering the service worker
+  window.addEventListener('load', () => {
+    // Register the service worker located at /sw.js
+    navigator.serviceWorker.register('/sw.js')
+      .then((registration) => {
+        // Log success message and the scope of the service worker
+        console.log('Service Worker registered with scope:', registration.scope);
+      })
+      .catch((error) => {
+        // Log an error message if registration fails
+        console.error('Service Worker registration failed:', error);
+      });
+  });
+}
+
 $(document).ready(function(){
 	var canvas = $('#canvas')[0];
 	var ctx = canvas.getContext("2d");
@@ -123,6 +140,7 @@ function adjust_speed() {
           var yPos = y * cw + cw / 2;
 		ctx.fillStyle=color;
 		ctx.beginPath();
+		//ctx.arc(x*cw,y*cw,6,0,Math.PI*2);
 		 ctx.arc(xPos, yPos, radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.strokeStyle="white";
@@ -173,6 +191,16 @@ function adjust_speed() {
 		else if(key == "38" && d != "down") d ="up";
 		else if(key == "39" && d!= "left") d = "right";
 		else if(key == "40" && d!="up") d = "down";
+		// Check for WASD keys
+    else if (key == 65 && d != "right") { // A
+        d = "left";
+    } else if (key == 87 && d != "down") { // W
+        d = "up";
+    } else if (key == 68 && d != "left") { // D
+        d = "right";
+    } else if (key == 83 && d != "up") { // S
+        d = "down";
+    }
 		Direction = true;
 		 setTimeout(function() {
         Direction = false;
@@ -221,14 +249,16 @@ function adjust_speed() {
 // this code is for mobile touch screen 
 var touchStartX = 0;
 var touchStartY = 0;
-
+d = "right";
 $('#canvas').on('touchstart', function(e) {
     var touch = e.touches[0];
     touchStartX = touch.clientX;
     touchStartY = touch.clientY;
-},{ passive: true });
+},{ passive: true});
 
 $('#canvas').on('touchmove', function(e) {
+	 // Prevent default behavior to stop page refresh on pull down
+    e.preventDefault(); 
     var touch = e.touches[0];
     var touchEndX = touch.clientX;
     var touchEndY = touch.clientY;
@@ -244,8 +274,8 @@ $('#canvas').on('touchmove', function(e) {
         else if (diffY < 0 && d != "down") d = "up";
     }
 
-},{ passive: true });
-
+},{ passive: false });
+	
     //Modes for select mode
    $('#diff-btn').click(function() {
         $('#diff-option').toggle(); 
